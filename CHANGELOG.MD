@@ -1,5 +1,14 @@
 ## Changelog
 
+## v1.5.0
+
+- Simplified integration to prepare for HA merge.
+  - Energy and update entities removed.
+  - Will be re-added later.
+- Increased the update frequency to 15s
+- Support for ACS devices (Water heaters)
+- Code corrections
+
 ## v1.4.0
 
 - Support for Oval Towel

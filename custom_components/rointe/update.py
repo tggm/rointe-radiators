@@ -17,7 +17,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .coordinator import RointeDataUpdateCoordinator
-from .rointe_entity import RointeRadiatorEntity
+from .entity import RointeRadiatorEntity
 
 
 async def async_setup_entry(

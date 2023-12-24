@@ -13,7 +13,7 @@ from homeassistant.helpers.typing import StateType
 
 from .const import DOMAIN
 from .coordinator import RointeDataUpdateCoordinator
-from .rointe_entity import RointeRadiatorEntity
+from .entity import RointeRadiatorEntity
 from .sensor_descriptions import SENSOR_DESCRIPTIONS, RointeSensorEntityDescription
 
 

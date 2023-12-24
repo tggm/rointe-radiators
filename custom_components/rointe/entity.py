@@ -1,7 +1,7 @@
 """Rointe devices entity model."""
 from __future__ import annotations
 
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, ROINTE_MANUFACTURER
@@ -9,16 +9,15 @@ from .coordinator import RointeDataUpdateCoordinator
 from .device_manager import RointeDevice, RointeDeviceManager
 
 
-class RointeHAEntity(CoordinatorEntity):
+class RointeBaseEntity(CoordinatorEntity):
     """Rointe entity base class."""
 
     def __init__(
-        self, coordinator: RointeDataUpdateCoordinator, name: str, unique_id: str
+        self, coordinator: RointeDataUpdateCoordinator, unique_id: str
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
         self._attr_unique_id = f"rointe-{unique_id}"
-        self._attr_name = name
 
     @property
     def device_manager(self) -> RointeDeviceManager:
@@ -26,18 +25,17 @@ class RointeHAEntity(CoordinatorEntity):
         return self.coordinator.device_manager
 
 
-class RointeRadiatorEntity(RointeHAEntity):
+class RointeRadiatorEntity(RointeBaseEntity):
     """Base class for entities that support a Radiator device (climate and sensors)."""
 
     def __init__(
         self,
         coordinator: RointeDataUpdateCoordinator,
         radiator: RointeDevice,
-        name: str,
         unique_id: str,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, name, unique_id)
+        super().__init__(coordinator, unique_id)
         self._radiator = radiator
 
     @property

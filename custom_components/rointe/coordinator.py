@@ -6,17 +6,15 @@ from typing import Any
 
 from rointesdk.device import RointeDevice
 
-from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers import device_registry
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .device_manager import RointeDeviceManager
-from .sensor_descriptions import RointeSensorEntityDescription
 
-ROINTE_API_REFRESH_INTERVAL = timedelta(seconds=60)
+ROINTE_API_REFRESH_INTERVAL = timedelta(seconds=15)
 
 
 class RointeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, RointeDevice]]):
@@ -64,8 +62,7 @@ class RointeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, RointeDevice]]
         entity_constructor_list: list[Any],
         platform: str,
     ) -> None:
-        """
-        Add entities for new devices, for a given platform.
+        """Add entities for new devices, for a given platform.
 
         Called from a platform's `async_setup_entry`.
         """
@@ -91,37 +88,6 @@ class RointeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, RointeDevice]]
         if new_entities:
             async_add_entities(new_entities)
 
-    @callback
-    def add_sensor_entities_for_seen_keys(
-        self,
-        async_add_entities: AddEntitiesCallback,
-        sensor_descriptions: list[RointeSensorEntityDescription],
-        sensor_constructor: type,
-    ) -> None:
-        """Add entities for new sensors from a list of entity descriptions."""
-
-        discovered_devices: dict[str, RointeDevice] = self.data
-
-        if not discovered_devices:
-            return
-
-        new_entities: list = []
-
-        for device_id, device in discovered_devices.items():
-            if device_id in self.unregistered_keys[Platform.SENSOR]:
-
-                new_entities.extend(
-                    [
-                        sensor_constructor(device, self, sensor_description)
-                        for sensor_description in sensor_descriptions
-                    ]
-                )
-
-                self.unregistered_keys[Platform.SENSOR].pop(device_id)
-
-        if new_entities:
-            async_add_entities(new_entities)
-
 
 @callback
 def device_update_info(hass: HomeAssistant, rointe_device: RointeDevice) -> None:
@@ -129,7 +95,7 @@ def device_update_info(hass: HomeAssistant, rointe_device: RointeDevice) -> None
 
     LOGGER.debug("Updating device registry info for %s", rointe_device.name)
 
-    dev_registry = device_registry.async_get(hass)
+    dev_registry = dr.async_get(hass)
 
     if device := dev_registry.async_get_device(
         identifiers={(DOMAIN, rointe_device.id)},

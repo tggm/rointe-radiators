@@ -1,5 +1,11 @@
 ## Changelog
 
+## v1.5.1
+
+- Adds more logging
+- Minor corrections in code styling
+- Minor corrections on some debug messages.
+
 ## v1.5.0
 
 - Simplified integration to prepare for HA merge.

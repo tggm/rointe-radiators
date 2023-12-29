@@ -1,20 +1,42 @@
 """Provides the Rointe DataUpdateCoordinator."""
 from __future__ import annotations
 
-from datetime import timedelta
+from collections.abc import Callable
+from dataclasses import dataclass
+
+from datetime import datetime, timedelta
 from typing import Any
 
 from rointesdk.device import RointeDevice
 
+from homeassistant.components.sensor import SensorEntityDescription
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .device_manager import RointeDeviceManager
 
 ROINTE_API_REFRESH_INTERVAL = timedelta(seconds=15)
+
+
+@dataclass
+class RointeSensorEntityDescriptionMixin:
+    """Define a description mixin for Rointe sensor entities."""
+
+    last_reset_fn: Callable[[RointeDevice], datetime | None]
+    name_fn: Callable[[RointeDevice], str]
+    value_fn: Callable[[RointeDevice], StateType]
+
+
+@dataclass
+class RointeSensorEntityDescription(
+    SensorEntityDescription, RointeSensorEntityDescriptionMixin
+):
+    """Define an object to describe Rointe sensor entities."""
 
 
 class RointeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, RointeDevice]]):
@@ -87,6 +109,37 @@ class RointeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, RointeDevice]]
 
         if new_entities:
             async_add_entities(new_entities)
+
+    @callback
+    def add_sensor_entities_for_seen_keys(
+        self,
+        async_add_entities: AddEntitiesCallback,
+        sensor_descriptions: list[RointeSensorEntityDescription],
+        sensor_constructor: type,
+    ) -> None:
+        """Add entities for new sensors from a list of entity descriptions."""
+
+        discovered_devices: dict[str, RointeDevice] = self.data
+
+        if not discovered_devices:
+            return
+
+        new_entities: list = []
+
+        for device_id, device in discovered_devices.items():
+            if device_id in self.unregistered_keys[Platform.SENSOR]:
+                new_entities.extend(
+                    [
+                        sensor_constructor(device, self, sensor_description)
+                        for sensor_description in sensor_descriptions
+                    ]
+                )
+
+                self.unregistered_keys[Platform.SENSOR].pop(device_id)
+
+        if new_entities:
+            async_add_entities(new_entities)
+
 
 
 @callback

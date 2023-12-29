@@ -9,7 +9,7 @@ LOGGER = logging.getLogger(__package__)
 
 DOMAIN = "rointe"
 DEVICE_DOMAIN = "climate"
-PLATFORMS: list[Platform] = [Platform.CLIMATE]
+PLATFORMS: list[Platform] = [Platform.CLIMATE, Platform.SENSOR, Platform.UPDATE]
 CONF_USERNAME = "rointe_username"
 CONF_PASSWORD = "rointe_password"
 CONF_INSTALLATION = "rointe_installation"

@@ -1,5 +1,9 @@
 ## Changelog
 
+## v1.6.0
+
+- Re-adds sensor and update platforms.
+
 ## v1.5.1
 
 - Adds more logging

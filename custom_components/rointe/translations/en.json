@@ -1,0 +1,20 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "invalid_auth": "Invalid authentication",
+            "unable_get_installations": "An error occurred while retrieving installations"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "rointe_password": "Password",
+                    "rointe_username": "Email"
+                },
+                "title": "Fill in your Rointe Connect information"
+            }
+        }
+    }
+}

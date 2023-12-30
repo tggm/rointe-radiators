@@ -1,16 +1,16 @@
 ## Changelog
 
-## v1.6.0
+## v1.6.0-b0 (Beta Version)
 
 - Re-adds sensor and update platforms.
 
-## v1.5.1
+## v1.5.1 (Beta version)
 
 - Adds more logging
 - Minor corrections in code styling
 - Minor corrections on some debug messages.
 
-## v1.5.0
+## v1.5.0 (Beta version)
 
 - Simplified integration to prepare for HA merge.
   - Energy and update entities removed.

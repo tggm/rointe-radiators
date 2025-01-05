@@ -10,7 +10,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import ENERGY_KILO_WATT_HOUR, POWER_WATT, TEMP_CELSIUS
+from homeassistant.const import (UnitOfPower, UnitOfEnergy, UnitOfTemperature)
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.typing import StateType
 
@@ -38,7 +38,7 @@ SENSOR_DESCRIPTIONS = [
         key="current_temperature",
         name="Current Temperature",
         device_class=SensorDeviceClass.TEMPERATURE,
-        native_unit_of_measurement=TEMP_CELSIUS,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda radiator: radiator.temp_probe,
         last_reset_fn=lambda radiator: None,
@@ -48,7 +48,7 @@ SENSOR_DESCRIPTIONS = [
         key="energy",
         name="Energy Consumption",
         device_class=SensorDeviceClass.ENERGY,
-        native_unit_of_measurement=ENERGY_KILO_WATT_HOUR,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda radiator: radiator.energy_data.kwh
@@ -63,7 +63,7 @@ SENSOR_DESCRIPTIONS = [
         key="power",
         name="Effective Power",
         device_class=SensorDeviceClass.POWER,
-        native_unit_of_measurement=POWER_WATT,
+        native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda radiator: radiator.energy_data.effective_power

@@ -1,6 +1,6 @@
 # 🌞 rointe-radiators
 
-** Note:** This is the new home for the rointe-hacs repository.
+**Note**: This is the new home for the rointe-hacs repository.
 
 A minimal integration for Rointe radiators in Home Assistant. 🏡
 

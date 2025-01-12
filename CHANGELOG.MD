@@ -1,5 +1,9 @@
 # Changelog
 
+## V2.2.1
+
+- Updated the repository name to rointe-radiators
+
 ## V2.2.0
 
 - Updated to rointe-sdk 1.6.0

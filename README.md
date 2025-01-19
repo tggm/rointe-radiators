@@ -1,6 +1,6 @@
 # 🌞 rointe-radiators
 
-**Note**: This is the new home for the rointe-hacs repository.
+**Note**: This is the new home for the old rointe-hacs repository. Please use this one: [rointe-radiators](https://github.com/tggm/rointe-radiators)
 
 A minimal integration for Rointe radiators in Home Assistant. 🏡
 
@@ -25,7 +25,7 @@ A minimal integration for Rointe radiators in Home Assistant. 🏡
 Please follow these steps:
 
 1. Install HACS. Follow instructios [here](https://www.hacs.xyz/docs/use/download/download/).
-2. Add this [repository](https://github.com/tggm/rointe-hacs) as a custom repository in HACS ([see instructions here](https://www.hacs.xyz/docs/faq/custom_repositories/))
+2. Add this [repository](https://github.com/tggm/rointe-radiators) as a custom repository in HACS ([see instructions here](https://www.hacs.xyz/docs/faq/custom_repositories/))
 3. **Note**: If you're upgrading from a version prior to 2.0.0 you should remove the existing integration.
 4. You should now have a new integration available (_Rointe Heaters_) under Settings -> Integrations in Home Assistant.
 

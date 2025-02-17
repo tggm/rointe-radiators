@@ -7,6 +7,12 @@
           "rointe_username": "[%key:common::config_flow::data::email%]",
           "rointe_password": "[%key:common::config_flow::data::password%]"
         }
+      },
+      "installation": {
+        "title": "Select the installation",
+        "data": {
+          "rointe_installation": "Installation"
+        }
       }
     },
     "error": {

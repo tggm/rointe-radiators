@@ -16,7 +16,14 @@ CONF_INSTALLATION = "rointe_installation"
 
 ROINTE_MANUFACTURER = "Rointe"
 
-ROINTE_SUPPORTED_DEVICES = ["radiator", "towel", "therm", "radiatorb", "acs", "oval_towel"]
+ROINTE_SUPPORTED_DEVICES = [
+    "radiator",
+    "towel",
+    "therm",
+    "radiatorb",
+    "acs",
+    "oval_towel",
+]
 
 RADIATOR_DEFAULT_TEMPERATURE = 20
 

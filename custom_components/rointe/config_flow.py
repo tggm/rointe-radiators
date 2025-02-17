@@ -7,9 +7,14 @@ from typing import Any
 from rointesdk.rointe_api import RointeAPI
 import voluptuous as vol
 
-from homeassistant import config_entries
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.selector import (
+    SelectOptionDict,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 
 from .const import CONF_INSTALLATION, CONF_PASSWORD, CONF_USERNAME, DOMAIN, LOGGER
 
@@ -21,7 +26,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 )
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class RointeConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle the config flow for Rointe Heaters."""
 
     VERSION = 1
@@ -33,7 +38,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Step: User credentials validation."""
 
         if user_input is None:
@@ -41,7 +46,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 step_id="user", data_schema=STEP_USER_DATA_SCHEMA
             )
 
+        LOGGER.debug("Initializing Rointe API")
         rointe_api = RointeAPI(user_input[CONF_USERNAME], user_input[CONF_PASSWORD])
+        LOGGER.debug("Rointe API initialized")
 
         login_error_code = await self.hass.async_add_executor_job(
             rointe_api.initialize_authentication
@@ -57,9 +64,11 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors={"base": "invalid_auth"},
             )
 
+        LOGGER.debug("Logged in successfully. Retrieving installations")
         installations_response = await self.hass.async_add_executor_job(
             rointe_api.get_installations
         )
+        LOGGER.debug("Installations retrieved")
 
         if not installations_response.success:
             LOGGER.error(
@@ -83,15 +92,29 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_installation(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Select the installation."""
         if not user_input:
+            if not self.step_user_installations:
+                return self.async_abort(reason="no_installations")
+
+            installation_choices = [
+                SelectOptionDict(
+                    value=key,
+                    label=f"{location}",
+                )
+                for key, location in self.step_user_installations.items()
+            ]
+
             return self.async_show_form(
                 step_id="installation",
                 data_schema=vol.Schema(
                     {
-                        vol.Required(CONF_INSTALLATION): vol.In(
-                            self.step_user_installations
+                        vol.Required(CONF_INSTALLATION): SelectSelector(
+                            SelectSelectorConfig(
+                                options=installation_choices,
+                                mode=SelectSelectorMode.DROPDOWN,
+                            )
                         )
                     }
                 ),

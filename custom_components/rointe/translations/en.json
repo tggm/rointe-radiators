@@ -9,11 +9,17 @@
         },
         "step": {
             "user": {
+                "title": "Fill in your Rointe Connect information",
                 "data": {
                     "rointe_password": "Password",
                     "rointe_username": "Email"
-                },
-                "title": "Fill in your Rointe Connect information"
+                }
+            },
+            "installation": {
+                "title": "Select the installation",
+                "data": {
+                  "rointe_installation": "Installation"
+                }
             }
         }
     }

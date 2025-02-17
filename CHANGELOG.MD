@@ -1,5 +1,12 @@
 # Changelog
 
+## V2.2.2
+
+- Refactor the configurtion flow
+- Additional debug messages
+- Updated the code to the HA 2025.3.0.dev0
+- Minor cleanups
+
 ## V2.2.1
 
 - Updated the repository name to rointe-radiators

@@ -47,7 +47,8 @@ class RointeRadiatorEntity(RointeBaseEntity):
             product_name = self._radiator.rointe_product.product_name
         else:
             product_name = (
-                f"{self._radiator.type.capitalize()} {self._radiator.product_version.capitalize()}",
+                f"{self._radiator.type.capitalize()} "
+                f"{self._radiator.product_version.capitalize()}"
             )
 
         return DeviceInfo(
